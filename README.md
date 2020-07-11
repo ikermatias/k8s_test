@@ -61,10 +61,10 @@ hello-world-python-code/
 
 El **Dockerfile** copia el código de la aplicación dentro del contenedor, instala solo los requerimientos del archivo **requirements.txt** ya que este tiene solo las dependecias necesarias para correr la aplicación, crea un ENV para que FLask corra en modo producción, expone el puerto por el cual corre la app y ejecuta la aplicación. El Dockerfile solo debería de compilarse para una aplicación que esté lista para producción.     
 
-⋅⋅⋅ **requirementes_dev.txt** => tiene las dependencias necesarias para compilar el código en modo desarrollador, de tal manera que tenga en cuenta la instalación de los módulos para pruebas.  
+⋅⋅⋅**requirementes_dev.txt** => tiene las dependencias necesarias para compilar el código en modo desarrollador, de tal manera que tenga en cuenta la instalación de los módulos para pruebas.  
 
-⋅⋅⋅ **src** -> contiene la aplicación, esta aplicación tiene solo dos endpoint configurados: "/" y "/health"  
-⋅⋅⋅ **test** -> Carpeta con el código para correr las pruebas unitarias del código.  
+⋅⋅⋅**src** -> contiene la aplicación, esta aplicación tiene solo dos endpoint configurados: "/" y "/health"  
+⋅⋅⋅**test** -> Carpeta con el código para correr las pruebas unitarias del código.  
 
 Por otro lado, dentro de la raíz de este proyecto hay dos archivos muy importantes.
 ```
@@ -82,12 +82,12 @@ k8s_test
 ⋅⋅⋅la variable `tag_name` = hace referencia al nombre que se le pondrá a la docker image.  
 
 - **pipeline.sh** => Este archivo es un ejecutable escrito en bash el cual tiene el siguiente proceso de ejecución:
-⋅⋅⋅ Detalles de inicio
-⋅⋅⋅ **make_build_and_test()** => en este paso, lo que se hace es utilizar docker para construir una imagen temporal de la app en modo desarrollo y se corren las pruebas unitarias con pytest. Si la ocurrencia de la palabra FAILED en los logs de ejecución es ms grande que cero, entonces quiere decir que las pruebas no pasaron satisfactoriamente y por lo tanto, el pipeline aborta.  
-⋅⋅⋅ **package()** => Una vez las pruebas pasaron, se procede a empaquetar la aplicación, que en este caso es un proceso de contruir la imagen desde nuestro Dockerfile que ya tenemos listo para versiones de producción, nos logueamos (docker login) a docker, y hacemos PUSH de la imagen a nuestro repositorio.
-⋅⋅⋅ **deploy()** => Una vez la aplicación ya se ha empaquetado, se procede a desplegar la imagen en Kubernetes. La función primero extrae del archivo values.yaml los el valor de la anterior imagen, seguidamente construye el nombre de la siguiente imagen y reemplaza en el archivo values.yaml el nombre de la nueva imagen. 
+⋅⋅⋅Detalles de inicio
+⋅⋅⋅**make_build_and_test()** => en este paso, lo que se hace es utilizar docker para construir una imagen temporal de la app en modo desarrollo y se corren las pruebas unitarias con pytest. Si la ocurrencia de la palabra FAILED en los logs de ejecución es ms grande que cero, entonces quiere decir que las pruebas no pasaron satisfactoriamente y por lo tanto, el pipeline aborta.  
+⋅⋅⋅**package()** => Una vez las pruebas pasaron, se procede a empaquetar la aplicación, que en este caso es un proceso de contruir la imagen desde nuestro Dockerfile que ya tenemos listo para versiones de producción, nos logueamos (docker login) a docker, y hacemos PUSH de la imagen a nuestro repositorio.  
+⋅⋅⋅**deploy()** => Una vez la aplicación ya se ha empaquetado, se procede a desplegar la imagen en Kubernetes. La función primero extrae del archivo values.yaml los el valor de la anterior imagen, seguidamente construye el nombre de la siguiente imagen y reemplaza en el archivo values.yaml el nombre de la nueva imagen. 
 Hace una busqueda en la lista de los chart desplegados con helm, para determinar si se encuentra ya desplegado el chart, si se encuentra desplegado entonces hace un upgrade, de lo contrario, procede a instalar un nuevo release del chart.  
--- smoke_test() => Se deja declarado (TODO) para posteriores versiones.
+⋅⋅⋅**smoke_test()** => Se deja declarado (TODO) para posteriores versiones.
 
 ### Ejecución del proyecto.
 
