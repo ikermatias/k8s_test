@@ -27,13 +27,15 @@ A su vez, se asume que cuenta con los siguientes pre-requisitos instalados, en c
 
 ## Desarrollo de la solución.
 
-Dentro de la solución existe la carpeta 'hello-world-python' esta carpeta tiene la sgnte estructura:
-+-- hello-world-python
-+-- templates
-|   +-- ingress.yaml
-|   +-- microservice-deployment.yaml
-+-- Char.yaml
-+-- Values.yaml
+Dentro de la solución existe la carpeta 'hello-world-python' esta carpeta tiene la sgnte estructura:  
+```
++--_hello-world-python
++--_templates
+|   +--_ingress.yaml
+|   +--_microservice-deployment.yaml
++--_Char.yaml
++--_Values.yaml  
+````
 
 La responsabilidad de esta carpeta es tener todos los archivos necesarios para la construcción del Chart que nos desplegara nuestra App.
 El archivo microservice-deployment.yaml, define un objeto de tipo Deployment, el cual tiene configurado 2 replicas, la plantilla para los pods, los cuales tienen su healtcheck readinesProbe y livenesessprobe. A su vez, en este archivo se define el servicio tipo ClusterIP en el cual van a vivir los PODS.
