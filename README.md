@@ -40,11 +40,11 @@ Dentro de la solución existe la carpeta 'hello-world-python' esta carpeta tiene
 La responsabilidad de esta carpeta es tener todos los archivos necesarios para la construcción del Chart que nos desplegara nuestra App.
 El archivo microservice-deployment.yaml, define un objeto de tipo Deployment, el cual tiene configurado 2 replicas, la plantilla para los pods, los cuales tienen su healtcheck readinesProbe y livenesessprobe. A su vez, en este archivo se define el servicio tipo ClusterIP en el cual van a vivir los PODS.
 
-ingress.yaml define la creación del ingress y solamente tiene un path por el cual escuchar peticiones.
+**ingress.yaml** define la creación del ingress y solamente tiene un path por el cual escuchar peticiones.
 
-Values.yaml tiene todos los valores de las variables de configuración para el deployment, service e ingress.  
+**Values.yaml** tiene todos los valores de las variables de configuración para el deployment, service e ingress.  
 
-Dentro de la solución existe la carpeta 'hello-world-python-code', esta carpeta contiene el código de la Aplicación, el Dockerfile para construir la imagen de la aplicación y los respectivos requierements, para la instalación de dependencias de python.
+Dentro de la solución existe la carpeta `hello-world-python-code`, esta carpeta contiene el código de la Aplicación, el Dockerfile para construir la imagen de la aplicación y los respectivos requierements, para la instalación de dependencias de python.
 ```
 hello-world-python-code/
 ├── Dockerfile
@@ -59,12 +59,12 @@ hello-world-python-code/
 2 directories, 7 files
 ```
 
-El Dockerfile copia el código de la aplicación dentro del contenedor, instala solo los requerimientos del archivo requirements.txt ya que este tiene solo las dependecias necesarias para correr la aplicación, crea un ENV para que FLask corra en modo producción, expone el puerto por el cual corre la app y ejecuta la aplicación. El Dockerfile solo debería de compilarse para una aplicación que esté lista para producción.   
+El **Dockerfile** copia el código de la aplicación dentro del contenedor, instala solo los requerimientos del archivo **requirements.txt** ya que este tiene solo las dependecias necesarias para correr la aplicación, crea un ENV para que FLask corra en modo producción, expone el puerto por el cual corre la app y ejecuta la aplicación. El Dockerfile solo debería de compilarse para una aplicación que esté lista para producción.     
 
-requirementes_dev.txt => tiene las dependencias necesarias para compilar el código en modo desarrollador, de tal manera que tenga en cuenta la instalación de los módulos para pruebas.  
+⋅⋅⋅ **requirementes_dev.txt** => tiene las dependencias necesarias para compilar el código en modo desarrollador, de tal manera que tenga en cuenta la instalación de los módulos para pruebas.  
 
-src -> contiene la aplicación, esta aplicación tiene solo dos endpoint configurados: "/" y "/health"  
-test -> Carpeta con el código para correr las pruebas unitarias del código.  
+⋅⋅⋅ **src** -> contiene la aplicación, esta aplicación tiene solo dos endpoint configurados: "/" y "/health"  
+⋅⋅⋅ **test** -> Carpeta con el código para correr las pruebas unitarias del código.  
 
 Por otro lado, dentro de la raíz de este proyecto hay dos archivos muy importantes.
 ```
@@ -74,18 +74,18 @@ k8s_test
 └── README.md
 ```
 
-- config.txt => este archivo contiene los parametros de configuración necesaria para hacer un proceso de despliegue automático, más reutilizable.
-la variable `launcher_version` hace referencia a la versión que le quieres taguear a tu pipeline.  
-la variable `directory_logs` hace referencia a la ruta del directorio donde quieres que se generen los logs de ejecución  
-la variable `docker_hub_repo`=> hace referencia al nombre del repositorio en docker hub donde se va almacenar la imagen.  
-la variable `tag_image` = hace referencia al tag de versionamiento que le quieres asignar a la contrucción de la imagen.  
-la variable `tag_name` = hace referencia al nombre que se le pondrá a la docker image.  
+- **config.txt** => este archivo contiene los parametros de configuración necesaria para hacer un proceso de despliegue automático, más reutilizable.
+⋅⋅⋅la variable `launcher_version` hace referencia a la versión que le quieres taguear a tu pipeline.  
+⋅⋅⋅la variable `directory_logs` hace referencia a la ruta del directorio donde quieres que se generen los logs de ejecución  
+⋅⋅⋅la variable `docker_hub_repo`=> hace referencia al nombre del repositorio en docker hub donde se va almacenar la imagen.  
+⋅⋅⋅la variable `tag_image` = hace referencia al tag de versionamiento que le quieres asignar a la contrucción de la imagen.  
+⋅⋅⋅la variable `tag_name` = hace referencia al nombre que se le pondrá a la docker image.  
 
-- pipeline.sh => Este archivo es un ejecutable escrito en bash el cual tiene el siguiente proceso de ejecución:
--- Detalles de inicio
--- make_build_and_test() => en este paso, lo que se hace es utilizar docker para construir una imagen temporal de la app en modo desarrollo y se corren las pruebas unitarias con pytest. Si la ocurrencia de la palabra FAILED en los logs de ejecución es ms grande que cero, entonces quiere decir que las pruebas no pasaron satisfactoriamente y por lo tanto, el pipeline aborta.  
--- package() => Una vez las pruebas pasaron, se procede a empaquetar la aplicación, que en este caso es un proceso de contruir la imagen desde nuestro Dockerfile que ya tenemos listo para versiones de producción, nos logueamos (docker login) a docker, y hacemos PUSH de la imagen a nuestro repositorio.
--- deploy() => Una vez la aplicación ya se ha empaquetado, se procede a desplegar la imagen en Kubernetes. La función primero extrae del archivo values.yaml los el valor de la anterior imagen, seguidamente construye el nombre de la siguiente imagen y reemplaza en el archivo values.yaml el nombre de la nueva imagen. 
+- **pipeline.sh** => Este archivo es un ejecutable escrito en bash el cual tiene el siguiente proceso de ejecución:
+⋅⋅⋅ Detalles de inicio
+⋅⋅⋅ **make_build_and_test()** => en este paso, lo que se hace es utilizar docker para construir una imagen temporal de la app en modo desarrollo y se corren las pruebas unitarias con pytest. Si la ocurrencia de la palabra FAILED en los logs de ejecución es ms grande que cero, entonces quiere decir que las pruebas no pasaron satisfactoriamente y por lo tanto, el pipeline aborta.  
+⋅⋅⋅ **package()** => Una vez las pruebas pasaron, se procede a empaquetar la aplicación, que en este caso es un proceso de contruir la imagen desde nuestro Dockerfile que ya tenemos listo para versiones de producción, nos logueamos (docker login) a docker, y hacemos PUSH de la imagen a nuestro repositorio.
+⋅⋅⋅ **deploy()** => Una vez la aplicación ya se ha empaquetado, se procede a desplegar la imagen en Kubernetes. La función primero extrae del archivo values.yaml los el valor de la anterior imagen, seguidamente construye el nombre de la siguiente imagen y reemplaza en el archivo values.yaml el nombre de la nueva imagen. 
 Hace una busqueda en la lista de los chart desplegados con helm, para determinar si se encuentra ya desplegado el chart, si se encuentra desplegado entonces hace un upgrade, de lo contrario, procede a instalar un nuevo release del chart.  
 -- smoke_test() => Se deja declarado (TODO) para posteriores versiones.
 
