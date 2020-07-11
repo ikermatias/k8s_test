@@ -81,8 +81,8 @@ k8s_test
 ⋅⋅⋅la variable `tag_image` = hace referencia al tag de versionamiento que le quieres asignar a la contrucción de la imagen.  
 ⋅⋅⋅la variable `tag_name` = hace referencia al nombre que se le pondrá a la docker image.  
 
-- **pipeline.sh** => Este archivo es un ejecutable escrito en bash el cual tiene el siguiente proceso de ejecución:
-⋅⋅⋅Detalles de inicio
+- **pipeline.sh** => Este archivo es un ejecutable escrito en bash el cual tiene el siguiente proceso de ejecución:  
+⋅⋅⋅**Detalles de inicio**  
 ⋅⋅⋅**make_build_and_test()** => en este paso, lo que se hace es utilizar docker para construir una imagen temporal de la app en modo desarrollo y se corren las pruebas unitarias con pytest. Si la ocurrencia de la palabra FAILED en los logs de ejecución es ms grande que cero, entonces quiere decir que las pruebas no pasaron satisfactoriamente y por lo tanto, el pipeline aborta.  
 ⋅⋅⋅**package()** => Una vez las pruebas pasaron, se procede a empaquetar la aplicación, que en este caso es un proceso de contruir la imagen desde nuestro Dockerfile que ya tenemos listo para versiones de producción, nos logueamos (docker login) a docker, y hacemos PUSH de la imagen a nuestro repositorio.  
 ⋅⋅⋅**deploy()** => Una vez la aplicación ya se ha empaquetado, se procede a desplegar la imagen en Kubernetes. La función primero extrae del archivo values.yaml los el valor de la anterior imagen, seguidamente construye el nombre de la siguiente imagen y reemplaza en el archivo values.yaml el nombre de la nueva imagen. 
