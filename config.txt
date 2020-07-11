@@ -1,0 +1,5 @@
+launcher_version = 1.0.0
+directory_logs = .
+docker_hub_repo = ikermatias
+tag_image = 0.0.11
+name_image = hello-world-python
